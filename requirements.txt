@@ -1,0 +1,25 @@
+# Flask for API Server
+Flask
+
+# Searching and File Handling
+regex
+ripgrep
+chardet
+tqdm
+
+# Database (Optional)
+
+chromadb
+
+# Development & Debugging
+requests
+pytest
+black
+flake8
+
+# Performance Optimization
+joblib
+
+# Vector Search (Optional for Semantic Search)
+sentence-transformers
+faiss-cpu  # Use 'faiss-gpu' if you have a GPU
