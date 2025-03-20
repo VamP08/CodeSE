@@ -3,6 +3,7 @@ from tree_sitter import Language, Parser
 import pickle
 import ast
 from pathlib import Path
+import re
 from typing import List, Dict, Tuple
 
 class CodeChunker:
@@ -311,7 +312,7 @@ def process_file(file_path: str) -> List[Dict]:
 
     
 if __name__ == "__main__":
-    file_path = 'D:/New folder/Work/CodeSE/CodeSE/test/dodebase/PYTHON/TWO SUM.py'  # Example file path
+    file_path = 'D:/New folder/Work/CodeSE/CodeSE/test/dodebase/C++/NUMBER PRISON PATTERN.cpp'  # Example file path
     chunks = process_file(file_path)
 
     if chunks:
