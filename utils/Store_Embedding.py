@@ -139,3 +139,4 @@ if __name__ == "__main__":
     # Process the JSON file
     store_embeddings_from_json(json_file_path)
     print("Done.")
+
