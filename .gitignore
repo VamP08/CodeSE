@@ -1,5 +1,8 @@
-
+chromadb_store
 test/
 .venv/
 utils/__pycache__
 utils/chromadb_store
+utils\__pycache__
+testbase
+code_chunks.json
