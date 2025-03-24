@@ -56,9 +56,11 @@ def store_embeddings_in_chromadb(chunks):
 
     # Step 2: Generate vector embeddings
     vector_embeddings = embedding_model.generate_embeddings(cleaned_chunks)
+    print(vector_embeddings)
 
     # Step 3: Fetch existing metadata and avoid duplicates
     existing_metadata = collection.get(include=['metadatas'])['metadatas']
+    print(existing_metadata)
 
     if existing_metadata is None:
         existing_metadata = []  # Ensure it's an empty list if nothing is stored
@@ -135,3 +137,4 @@ if __name__ == "__main__":
 
     store_embeddings_in_chromadb([code_chunk])
     print("Done.")
+
