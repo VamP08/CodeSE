@@ -1,8 +1,7 @@
-chromadb_store
-test/
 .venv/
-utils/__pycache__
-utils/chromadb_store
-utils\__pycache__
-testbase
-code_chunks.json
+
+backend/utils/__pycache__
+backend/utils/chromadb_store
+backend/codebase
+
+frontend/node_modules
