@@ -4,5 +4,9 @@ backend/__pycache__
 backend/utils/__pycache__
 backend/utils/chromadb_store
 backend/codebase
-
+backend/chroma_db
 frontend/node_modules
+chromadb_store
+code_chunks.json
+testbase
+utils/__pycache__

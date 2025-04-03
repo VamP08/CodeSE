@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+import subprocess
 from typing import List, Dict, Optional
 from utils.TreeParser import CodeChunker
 from oswalker import find_files
@@ -112,8 +113,7 @@ class FolderProcessor:
     
     def save_chunks_to_file(self, output_path: str) -> None:
         """Save all chunks to a file in a structured format."""
-        import json
-        
+        import json        
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(self.all_chunks, f, indent=2)
         
@@ -132,6 +132,12 @@ if __name__ == "__main__":
     # Save chunks to file
     output_path = os.path.join(os.path.dirname(folder_path), "code_chunks.json")
     processor.save_chunks_to_file(output_path)
+    try:
+        print("Activating store_embedding...")
+        subprocess.run(["python", "Store_Embedding.py"], check=True)
+        print("store_embedding activated successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing store_embedding: {e}")
     
     # Print sample of chunks
     if chunks:
@@ -147,3 +153,4 @@ if __name__ == "__main__":
         
         if len(chunks) > 3:
             print(f"... and {len(chunks) - 3} more chunks")
+
