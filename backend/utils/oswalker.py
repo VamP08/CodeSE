@@ -27,8 +27,7 @@ def find_files(root_path) :
                 file_paths.append(file_path)
     return file_paths
 
-root_path=input("enter path")
-print(find_files(root_path))   
+  
 
 
 

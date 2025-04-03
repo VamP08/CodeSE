@@ -941,19 +941,5 @@ def process_file(file_path: str) -> List[Dict]:
         print(f"❌ Unexpected error processing '{file_path}': {str(e)}")
         return []
     
-if __name__ == "__main__":
-    file_path = 'E:\\Code\\Project\\codese\\CodeSE\\testbase\\test.c'  # Example file path
-    chunks = process_file(file_path)
-
-    if chunks:
-        for chunk in chunks:
-            print(f"\nChunk ID: {chunk['chunk_id']}")
-            print(f"File: {chunk['file_path']}")
-            print(f"Lines: {chunk['start_line']}-{chunk['end_line']}")
-            print(f"Language: {chunk['language']}")
-            print("Code:")
-            print(chunk['code'])
-            print("-" * 50)
-    else:
-        print("No chunks extracted.")
+    
 
