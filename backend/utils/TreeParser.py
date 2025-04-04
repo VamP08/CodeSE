@@ -940,6 +940,3 @@ def process_file(file_path: str) -> List[Dict]:
     except Exception as e:
         print(f"❌ Unexpected error processing '{file_path}': {str(e)}")
         return []
-    
-    
-

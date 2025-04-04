@@ -26,8 +26,3 @@ def find_files(root_path) :
             if filter_path(file_path):
                 file_paths.append(file_path)
     return file_paths
-
-  
-
-
-

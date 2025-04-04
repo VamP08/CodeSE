@@ -2,7 +2,7 @@ import chromadb
 import uuid
 import json
 import os
-from backend.utils.Vector_Embedding import CodeEmbeddingModel  # Import the model wrapper
+from Vector_Embedding import CodeEmbeddingModel  # Import the model wrapper
 
 # Initialize ChromaDB Client
 chroma_client = chromadb.PersistentClient(path="./chromadb_store")  # Persistent storage
@@ -139,4 +139,3 @@ if __name__ == "__main__":
     # Process the JSON file
     store_embeddings_from_json(json_file_path)
     print("Done.")
-
