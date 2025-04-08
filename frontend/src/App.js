@@ -9,7 +9,6 @@ function App() {
   const handleProcessPath = async () => {
     setLoading(true);
     setMessage("");
-  
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/process_path",

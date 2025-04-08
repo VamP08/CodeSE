@@ -2,17 +2,23 @@ import chromadb
 import uuid
 import json
 import os
-from Vector_Embedding import CodeEmbeddingModel  # Import the model wrapper
-
-# Initialize ChromaDB Client
-chroma_client = chromadb.PersistentClient(path="./chromadb_store")  # Persistent storage
-
-# Create a Collection
-collection = chroma_client.get_or_create_collection(name="code_embeddings")
+from utils.Vector_Embedding import CodeEmbeddingModel  # Import the model wrapper
 
 def store_embeddings_from_json(json_file_path):
     """Read chunks from JSON file created by folder_processor.py and store in ChromaDB."""
     
+    # Determine base repo path
+    base_repo_path = os.path.dirname(os.path.dirname(json_file_path))  # Go up from .code_search
+    storage_dir = os.path.join(base_repo_path, ".code_search")
+    os.makedirs(storage_dir, exist_ok=True)
+
+    # NEW: Initialize ChromaDB inside .code_search/chromadb_store 
+    chroma_store_path = os.path.join(storage_dir, "chromadb_store")
+    chroma_client = chromadb.PersistentClient(path=chroma_store_path)
+
+    # Create collection here (after initializing client) 
+    collection = chroma_client.get_or_create_collection(name="code_embeddings")
+
     # Initialize embedding model
     embedding_model = CodeEmbeddingModel()
     
@@ -100,42 +106,5 @@ def store_embeddings_from_json(json_file_path):
     
     print(f"Total chunks in DB after insertion: {updated_chunk_count}")
     
-    # Only print newly added chunks (up to 10 for brevity)
-    if new_chunks_added > 0:
-        print("\nSample of Newly Added Chunks:")
-        display_count = min(10, new_chunks_added)
-        for idx in range(initial_chunk_count, initial_chunk_count + display_count):
-            metadata = updated_metadata[idx]
-            print(f"\n[Chunk {idx + 1}]")
-            print(f"Chunk ID: {metadata.get('chunk_id', 'N/A')}")
-            print(f"File Path: {metadata.get('file_path', 'N/A')}")
-            print(f"Line Numbers: {metadata.get('line_numbers', 'N/A')}")
-            print(f"Language: {metadata.get('language', 'N/A')}")
-        
-        if new_chunks_added > 10:
-            print(f"\n... and {new_chunks_added - 10} more chunks")
+    
 
-# Example Usage
-if __name__ == "__main__":
-    import sys
-    
-    if len(sys.argv) > 1:
-        json_file_path = sys.argv[1]
-    else:
-        # Ask for the JSON file path
-        json_file_path = input("Enter path to the JSON file created by folder_processor.py: ")
-    
-    # Validate file exists and has .json extension
-    if not os.path.exists(json_file_path):
-        print(f"Error: File '{json_file_path}' does not exist.")
-        sys.exit(1)
-    
-    if not json_file_path.lower().endswith('.json'):
-        print(f"Warning: File '{json_file_path}' does not have a .json extension.")
-        confirm = input("Continue anyway? (y/n): ")
-        if confirm.lower() != 'y':
-            sys.exit(0)
-    
-    # Process the JSON file
-    store_embeddings_from_json(json_file_path)
-    print("Done.")

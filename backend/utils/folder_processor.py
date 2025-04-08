@@ -4,7 +4,8 @@ from pathlib import Path
 import subprocess
 from typing import List, Dict, Optional
 from utils.TreeParser import CodeChunker
-from oswalker import find_files
+from utils.oswalker import find_files
+import utils.Store_Embedding
 
 class FolderProcessor:
     def __init__(self):
@@ -118,38 +119,3 @@ class FolderProcessor:
             json.dump(self.all_chunks, f, indent=2)
         
         print(f"Saved {len(self.all_chunks)} chunks to {output_path}")
-
-if __name__ == "__main__":
-    # Example usage
-    if len(sys.argv) > 1:
-        folder_path = sys.argv[1]
-    else:
-        folder_path = input("Enter folder path to process: ")
-    
-    processor = FolderProcessor()
-    chunks = processor.process_folder(folder_path)
-    
-    # Save chunks to file
-    output_path = os.path.join(os.path.dirname(folder_path), "code_chunks.json")
-    processor.save_chunks_to_file(output_path)
-    try:
-        print("Activating store_embedding...")
-        subprocess.run(["python", "Store_Embedding.py"], check=True)
-        print("store_embedding activated successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing store_embedding: {e}")
-    
-    # Print sample of chunks
-    if chunks:
-        print("\nSample of extracted chunks:")
-        for i, chunk in enumerate(chunks[:3]):
-            print(f"\nChunk ID: {chunk['chunk_id']}")
-            print(f"File: {chunk['file_path']}")
-            print(f"Lines: {chunk['start_line']}-{chunk['end_line']}")
-            print(f"Language: {chunk['language']}")
-            print("Code (first 100 chars):")
-            print(chunk['code'][:100] + "..." if len(chunk['code']) > 100 else chunk['code'])
-            print("-" * 50)
-        
-        if len(chunks) > 3:
-            print(f"... and {len(chunks) - 3} more chunks")

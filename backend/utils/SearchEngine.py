@@ -2,7 +2,7 @@ import json
 import re
 from typing import List, Dict, Any, Optional, Set
 import chromadb
-from Vector_Embedding import CodeEmbeddingModel
+from utils.Vector_Embedding import CodeEmbeddingModel
 import nltk
 from nltk.corpus import wordnet
 
