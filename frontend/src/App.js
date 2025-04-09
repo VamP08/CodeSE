@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function App() {
@@ -6,17 +6,51 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  // NEW STATE FOR PROJECTS
+  const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState("");
+
+  // FETCH PROJECT LIST ON PAGE LOAD
+  useEffect(() => {
+    axios.get("http://127.0.0.1:5000/get_projects")
+      .then(res => {
+        setProjects(res.data.projects);
+      })
+      .catch(err => {
+        console.error("Error loading projects", err);
+      });
+  }, []);
+
+  // FUNCTION TO SELECT A PROJECT (saves in backend)
+  const handleProjectSelect = async (e) => {
+    const selectedPath = e.target.value;
+    setSelectedProject(selectedPath);
+
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/set_active_project", { path: selectedPath }, {
+        headers: { "Content-Type": "application/json" }
+      });
+      console.log(response.data.message);
+    } catch (err) {
+      console.error("Error setting active project:", err);
+    }
+  };
+
   const handleProcessPath = async () => {
     setLoading(true);
     setMessage("");
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/process_path",
-        { path },  // Ensure it's sending a JSON object
-        { headers: { "Content-Type": "application/json" } } // Explicitly set headers
+        { path },
+        { headers: { "Content-Type": "application/json" } }
       );
-      
+
       setMessage(response.data.message);
+
+      // Refresh project list after adding a new one
+      const updated = await axios.get("http://127.0.0.1:5000/get_projects");
+      setProjects(updated.data.projects);
     } catch (error) {
       setMessage("Error processing the path.");
       console.error("Error:", error);
@@ -47,6 +81,23 @@ function App() {
       </div>
 
       {message && <p className="mt-4 text-lg text-gray-700">{message}</p>}
+
+      {/* PROJECT SELECT DROPDOWN */}
+      <div className="mt-8">
+        <h2 className="text-lg font-semibold mb-2">Select a Project</h2>
+        <select
+          value={selectedProject}
+          onChange={handleProjectSelect}
+          className="p-2 border border-gray-400 rounded-md w-80"
+        >
+          <option value="">-- Select Project --</option>
+          {projects.map((proj, idx) => (
+            <option key={idx} value={proj.path}>
+              {proj.name}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }

@@ -214,7 +214,7 @@ if __name__ == "__main__":
         query = input("\nEnter search query (or 'quit'): ").strip()
         if query.lower() == 'quit':
             break
-
+            
         results = search_engine.combined_search(query, k=5)
         print(f"\nFound {len(results)} results:")
         print("-" * 80)

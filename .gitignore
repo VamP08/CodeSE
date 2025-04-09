@@ -5,6 +5,8 @@ backend/utils/__pycache__
 backend/utils/chromadb_store
 backend/codebase
 backend/chroma_db
+backend/.flaskenv
+
 frontend/node_modules
 chromadb_store
 code_chunks.json
