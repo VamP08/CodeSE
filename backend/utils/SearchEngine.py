@@ -11,12 +11,12 @@ nltk.download('omw-1.4', quiet=True)
 
 
 class CodeSearchEngine:
-    def __init__(self, collection=None, embedding_model=None, chunks_filepath: str = None):
-        if collection is None:
-            chroma_client = chromadb.PersistentClient(path="./chromadb_store")
-            self.collection = chroma_client.get_or_create_collection(name="code_embeddings")
-        else:
-            self.collection = collection
+    def __init__(self, chroma_path=None, collection_name="code_chunks", embedding_model=None, chunks_filepath: str = None):
+        if chroma_path is None:
+            chroma_path = "./chromadb_store"  # fallback default
+
+        chroma_client = chromadb.PersistentClient(path=chroma_path)
+        self.collection = chroma_client.get_or_create_collection(name=collection_name)
 
         if embedding_model is None:
             self.embedding_model = CodeEmbeddingModel()
@@ -202,19 +202,23 @@ if __name__ == "__main__":
     else:
         chunks_filepath = input("Enter path to JSON chunks file: ").strip()
 
+
     if not os.path.exists(chunks_filepath):
         print(f"Error: File '{chunks_filepath}' not found.")
         sys.exit(1)
 
-    chroma_client = chromadb.PersistentClient(path="./chromadb_store")
-    collection = chroma_client.get_or_create_collection(name="code_embeddings")
-    search_engine = CodeSearchEngine(collection, CodeEmbeddingModel(), chunks_filepath)
+    search_engine = CodeSearchEngine(
+    chroma_path="D:/New folder/Work/College Assignments/.code_search/chromadb_store",
+    collection_name="code_embeddings",
+    embedding_model=CodeEmbeddingModel(),
+    chunks_filepath=chunks_filepath
+)
 
     while True:
         query = input("\nEnter search query (or 'quit'): ").strip()
         if query.lower() == 'quit':
             break
-            
+
         results = search_engine.combined_search(query, k=5)
         print(f"\nFound {len(results)} results:")
         print("-" * 80)
