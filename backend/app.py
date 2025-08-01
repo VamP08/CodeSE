@@ -5,6 +5,7 @@ import os
 import chromadb
 from utils.folder_processor import FolderProcessor 
 from utils.Store_Embedding import store_embeddings_from_json
+from utils.SearchEngine import CodeSearchEngine
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)  # Allow frontend communication
@@ -105,6 +106,35 @@ def set_active_project():
     except Exception as e:
         return jsonify({"message": f"Server error: {str(e)}"}), 500
 
+@app.route('/search', methods=['POST'])
+def search():
+    try:
+        data = request.get_json()
+        query = data.get("query", "").strip()
+        if not query:
+            return jsonify({"message": "Query is required"}), 400
+
+        # Load active project
+        if not os.path.exists("active_project.json"):
+            return jsonify({"message": "No active project selected"}), 400
+
+        with open("active_project.json", "r") as f:
+            active = json.load(f)
+        path = active.get("path")
+        if not path or not os.path.exists(path):
+            return jsonify({"message": "Invalid active project path"}), 400
+
+        # Get chunk file path
+        chunks_path = os.path.join(path, ".code_search", "code_chunks.json")
+        if not os.path.exists(chunks_path):
+            return jsonify({"message": "Code chunks not found. Please process the path first."}), 404
+
+        search_engine = CodeSearchEngine(chunks_filepath=chunks_path)
+        results = search_engine.combined_search(query, k=10)
+
+        return jsonify({"results": results}), 200
+    except Exception as e:
+        return jsonify({"message": f"Search error: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

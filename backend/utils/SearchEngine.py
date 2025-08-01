@@ -2,7 +2,7 @@ import json
 import re
 from typing import List, Dict, Any, Optional, Set
 import chromadb
-from utils.Vector_Embedding import CodeEmbeddingModel
+from Vector_Embedding import CodeEmbeddingModel
 import nltk
 from nltk.corpus import wordnet
 
@@ -20,6 +20,7 @@ class CodeSearchEngine:
 
         if embedding_model is None:
             self.embedding_model = CodeEmbeddingModel()
+            print("prob here")
         else:
             self.embedding_model = embedding_model
 
@@ -40,6 +41,7 @@ class CodeSearchEngine:
             return {}
 
         try:
+            print("try vector")
             query_embedding = self.embedding_model.generate_embeddings([query])
             # Change 'k' to 'n_results' as per ChromaDB API
             results = self.collection.query(query_embedding, include=["metadatas", "documents"], n_results=k)
@@ -65,8 +67,9 @@ class CodeSearchEngine:
 
     def keyword_search(self, query: str) -> Dict[str, Dict]:
         if not query or not isinstance(query, str):
+            print("i tried key")
             return {}
-
+        print("keyyy")
         pattern = re.compile(re.escape(query), re.IGNORECASE)
         combined = {}
         for chunk in self.code_chunks:

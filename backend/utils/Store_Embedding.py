@@ -2,7 +2,7 @@ import chromadb
 import uuid
 import json
 import os
-from utils.Vector_Embedding import CodeEmbeddingModel  # Import the model wrapper
+from Vector_Embedding import CodeEmbeddingModel  # Import the model wrapper
 
 def store_embeddings_from_json(json_file_path):
     """Read chunks from JSON file created by folder_processor.py and store in ChromaDB."""
