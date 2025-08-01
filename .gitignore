@@ -6,6 +6,8 @@ backend/utils/chromadb_store
 backend/codebase
 backend/chroma_db
 backend/.flaskenv
+backend/active_project.json
+backend/project_registry.json
 
 frontend/node_modules
 chromadb_store
